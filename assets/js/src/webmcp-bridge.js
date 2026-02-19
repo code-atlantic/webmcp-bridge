@@ -155,22 +155,20 @@
 			response = await doRequest();
 		}
 
-		const data = await response.json();
-
 		if ( ! response.ok ) {
-			const errorMessage = data.message ?? `HTTP ${ response.status }`;
+			let errorMessage = `HTTP ${ response.status }`;
+			try {
+				const errData = await response.json();
+				errorMessage = errData.message ?? errorMessage;
+			} catch { /* non-JSON body — use status code */ }
 			throw new Error( `WebMCP Bridge: ${ errorMessage }` );
 		}
 
-		// WebMCP spec requires content array format: { content: [{ type, text }] }
-		const result = data.result;
-		const text   = typeof result === 'string'
-			? result
-			: JSON.stringify( result );
+		const data = await response.json();
 
-		return {
-			content: [ { type: 'text', text } ],
-		};
+		// Return the raw result — WebMCP spec execute() returns Promise<any>;
+		// the browser passes the value directly to the agent.
+		return data.result;
 	}
 
 	// -------------------------------------------------------------------------
@@ -194,12 +192,18 @@
 		// requestUserInteraction(); we don't use it since auth happens server-side.
 		const mcpTools = tools
 			.filter( ( tool ) => tool.name && tool.description )
-			.map( ( tool ) => ( {
-				name:        tool.name,
-				description: tool.description,
-				inputSchema: tool.inputSchema ?? { type: 'object', properties: {} },
-				execute:     async ( input /*, client */ ) => executeTool( tool.name, input ),
-			} ) );
+			.map( ( tool ) => {
+				const entry = {
+					name:        tool.name,
+					description: tool.description,
+					inputSchema: tool.inputSchema ?? { type: 'object', properties: {} },
+					execute:     async ( input /*, client */ ) => executeTool( tool.name, input ),
+				};
+				if ( tool.annotations ) {
+					entry.annotations = tool.annotations;
+				}
+				return entry;
+			} );
 
 		if ( mcpTools.length === 0 ) {
 			return;

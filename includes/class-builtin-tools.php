@@ -102,7 +102,7 @@ class Builtin_Tools {
 				),
 				'execute_callback'    => array( $this, 'execute_search_posts' ),
 				'permission_callback' => '__return_true',
-				'meta'                => array( 'wmcp_visibility' => 'public' ),
+				'meta'                => array( 'wmcp_visibility' => 'public', 'wmcp_read_only' => true ),
 			)
 		);
 	}
@@ -178,7 +178,7 @@ class Builtin_Tools {
 				),
 				'execute_callback'    => array( $this, 'execute_get_post' ),
 				'permission_callback' => '__return_true',
-				'meta'                => array( 'wmcp_visibility' => 'public' ),
+				'meta'                => array( 'wmcp_visibility' => 'public', 'wmcp_read_only' => true ),
 			)
 		);
 	}
@@ -260,7 +260,7 @@ class Builtin_Tools {
 				),
 				'execute_callback'    => array( $this, 'execute_get_categories' ),
 				'permission_callback' => '__return_true',
-				'meta'                => array( 'wmcp_visibility' => 'public' ),
+				'meta'                => array( 'wmcp_visibility' => 'public', 'wmcp_read_only' => true ),
 			)
 		);
 	}

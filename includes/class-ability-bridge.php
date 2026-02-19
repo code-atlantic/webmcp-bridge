@@ -106,6 +106,11 @@ class Ability_Bridge {
 			'inputSchema' => $input_schema,
 		);
 
+		// 6. Add readOnlyHint annotation if the ability declares itself read-only.
+		if ( $ability->get_meta_item( 'wmcp_read_only', false ) ) {
+			$tool['annotations'] = array( 'readOnlyHint' => true );
+		}
+
 		/**
 		 * Filter the WebMCP tool definition before it's sent to the browser.
 		 * Use to customize description, add tool annotations, etc.
