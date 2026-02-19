@@ -162,7 +162,15 @@
 			throw new Error( `WebMCP Bridge: ${ errorMessage }` );
 		}
 
-		return data.result;
+		// WebMCP spec requires content array format: { content: [{ type, text }] }
+		const result = data.result;
+		const text   = typeof result === 'string'
+			? result
+			: JSON.stringify( result );
+
+		return {
+			content: [ { type: 'text', text } ],
+		};
 	}
 
 	// -------------------------------------------------------------------------
@@ -181,22 +189,25 @@
 			return;
 		}
 
-		for ( const tool of tools ) {
-			if ( ! tool.name || ! tool.description ) {
-				continue;
-			}
+		// Build the tool list in the format the spec requires.
+		// execute receives (input, client) — client is ModelContextClient for
+		// requestUserInteraction(); we don't use it since auth happens server-side.
+		const mcpTools = tools
+			.filter( ( tool ) => tool.name && tool.description )
+			.map( ( tool ) => ( {
+				name:        tool.name,
+				description: tool.description,
+				inputSchema: tool.inputSchema ?? { type: 'object', properties: {} },
+				execute:     async ( input /*, client */ ) => executeTool( tool.name, input ),
+			} ) );
 
-			try {
-				navigator.modelContext.registerTool( {
-					name:        tool.name,
-					description: tool.description,
-					inputSchema: tool.inputSchema ?? { type: 'object', properties: {} },
-					execute: async ( input ) => executeTool( tool.name, input ),
-				} );
-			} catch {
-				// Individual tool registration failures are non-fatal.
-			}
+		if ( mcpTools.length === 0 ) {
+			return;
 		}
+
+		// provideContext() atomically replaces the full tool set — safer than
+		// looping registerTool() which throws on duplicate names.
+		navigator.modelContext.provideContext( { tools: mcpTools } );
 	}
 
 	// -------------------------------------------------------------------------
