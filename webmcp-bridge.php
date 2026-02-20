@@ -56,13 +56,16 @@ function wmcp_activation_check(): void {
 
 /**
  * Boot the plugin after all plugins are loaded.
- * Safety-net check for the Abilities API in case the plugin was somehow
- * activated on an incompatible version.
+ *
+ * We only bail on WP version — REST routes and script enqueue always register
+ * so that settings are accessible regardless of load order. Individual feature
+ * guards (function_exists checks) handle the case where the Abilities API
+ * plugin hasn't loaded yet or isn't installed.
  */
 function wmcp_init(): void {
 	global $wp_version;
 
-	if ( version_compare( $wp_version, '6.9', '<' ) || ! function_exists( 'wp_register_ability' ) ) {
+	if ( version_compare( $wp_version, '6.9', '<' ) ) {
 		add_action( 'admin_notices', 'wmcp_incompatible_notice' );
 		return;
 	}
@@ -87,7 +90,7 @@ function wmcp_incompatible_notice(): void {
 	?>
 	<div class="notice notice-error">
 		<p>
-			<?php esc_html_e( 'WebMCP Bridge requires WordPress 6.9 or higher with the Abilities API. The plugin is currently inactive.', 'webmcp-bridge' ); ?>
+			<?php esc_html_e( 'WebMCP Bridge requires WordPress 6.9 or higher. The plugin is currently inactive.', 'webmcp-bridge' ); ?>
 		</p>
 	</div>
 	<?php

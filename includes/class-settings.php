@@ -56,9 +56,11 @@ class Settings {
 
 	/**
 	 * Whether WebMCP Bridge is globally enabled.
+	 * Defaults to true on fresh installs — the plugin does nothing harmful
+	 * when enabled and "install and it works" is the right first-run experience.
 	 */
 	public function is_enabled(): bool {
-		return (bool) get_option( self::OPTION_ENABLED, false );
+		return (bool) get_option( self::OPTION_ENABLED, true );
 	}
 
 	/**
