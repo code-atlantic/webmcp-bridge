@@ -51,8 +51,19 @@ class Plugin {
 
 	private function register_hooks(): void {
 		// Register the WebMCP ability category, then built-in tools.
-		add_action( 'wp_abilities_api_categories_init', array( $this->builtin_tools, 'register_category' ) );
-		add_action( 'wp_abilities_api_init', array( $this->builtin_tools, 'register' ) );
+		// If the action has already fired (e.g. another plugin triggered the registry
+		// before plugins_loaded finished), call immediately instead of waiting.
+		if ( did_action( 'wp_abilities_api_categories_init' ) ) {
+			$this->builtin_tools->register_category();
+		} else {
+			add_action( 'wp_abilities_api_categories_init', array( $this->builtin_tools, 'register_category' ) );
+		}
+
+		if ( did_action( 'wp_abilities_api_init' ) ) {
+			$this->builtin_tools->register();
+		} else {
+			add_action( 'wp_abilities_api_init', array( $this->builtin_tools, 'register' ) );
+		}
 
 		// Enqueue front-end JS.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend' ) );

@@ -192,10 +192,6 @@ class REST_API {
 			);
 		}
 
-		// Trigger lazy initialization of the abilities registry so all abilities
-		// registered on wp_abilities_api_init are available before we look one up.
-		wp_get_abilities();
-
 		if ( ! wp_has_ability( $ability_name ) ) {
 			return new \WP_REST_Response(
 				array( 'code' => 'wmcp_not_found', 'message' => __( 'Tool not found.', 'webmcp-bridge' ) ),
