@@ -2,10 +2,10 @@
 /**
  * Main plugin class.
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
-namespace WebMCP_Bridge;
+namespace WebMCP;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -93,14 +93,14 @@ class Plugin {
 			return;
 		}
 
-		$asset_file = WMCP_PLUGIN_DIR . 'assets/js/build/webmcp-bridge.asset.php';
+		$asset_file = WMCP_PLUGIN_DIR . 'assets/js/build/webmcp-for-wordpress.asset.php';
 		$asset      = file_exists( $asset_file )
 			? require $asset_file
 			: array( 'dependencies' => array(), 'version' => WMCP_VERSION );
 
 		wp_enqueue_script(
-			'webmcp-bridge',
-			WMCP_PLUGIN_URL . 'assets/js/build/webmcp-bridge.js',
+			'webmcp-for-wordpress',
+			WMCP_PLUGIN_URL . 'assets/js/build/webmcp-for-wordpress.js',
 			$asset['dependencies'],
 			$asset['version'],
 			array( 'strategy' => 'defer' )
@@ -108,7 +108,7 @@ class Plugin {
 
 		// Pass configuration to the script.
 		wp_localize_script(
-			'webmcp-bridge',
+			'webmcp-for-wordpress',
 			'wmcpBridge',
 			array(
 				'toolsEndpoint'   => rest_url( 'webmcp/v1/tools' ),

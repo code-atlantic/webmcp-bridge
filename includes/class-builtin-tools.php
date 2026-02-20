@@ -5,19 +5,19 @@
  * Registers four practical tools as real WordPress Abilities so they work with
  * both the WebMCP browser API and the MCP Adapter (CLI/API agents).
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
-namespace WebMCP_Bridge;
+namespace WebMCP;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Registers the four built-in starter abilities:
- * - webmcp/search-posts
- * - webmcp/get-post
- * - webmcp/get-categories
- * - webmcp/submit-comment
+ * - wp/search-posts
+ * - wp/get-post
+ * - wp/get-categories
+ * - wp/submit-comment
  */
 class Builtin_Tools {
 
@@ -32,8 +32,8 @@ class Builtin_Tools {
 		wp_register_ability_category(
 			self::CATEGORY,
 			array(
-				'label'       => __( 'WebMCP', 'webmcp-bridge' ),
-				'description' => __( 'Tools exposed to AI agents via the WebMCP browser API.', 'webmcp-bridge' ),
+				'label'       => __( 'WebMCP', 'webmcp-for-wordpress' ),
+				'description' => __( 'Tools exposed to AI agents via the WebMCP browser API.', 'webmcp-for-wordpress' ),
 			)
 		);
 	}
@@ -60,26 +60,26 @@ class Builtin_Tools {
 	}
 
 	// -------------------------------------------------------------------------
-	// Tool: webmcp/search-posts
+	// Tool: wp/search-posts
 	// -------------------------------------------------------------------------
 
 	private function register_search_posts(): void {
 		wp_register_ability(
-			'webmcp/search-posts',
+			'wp/search-posts',
 			array(
-				'label'               => __( 'Search Posts', 'webmcp-bridge' ),
-				'description'         => __( 'Search published posts by keyword. Returns titles, excerpts, and URLs.', 'webmcp-bridge' ),
+				'label'               => __( 'Search Posts', 'webmcp-for-wordpress' ),
+				'description'         => __( 'Search published posts by keyword. Returns titles, excerpts, and URLs.', 'webmcp-for-wordpress' ),
 				'category'            => self::CATEGORY,
 				'input_schema'        => array(
 					'type'       => 'object',
 					'properties' => array(
 						'query' => array(
 							'type'        => 'string',
-							'description' => __( 'The search keyword or phrase.', 'webmcp-bridge' ),
+							'description' => __( 'The search keyword or phrase.', 'webmcp-for-wordpress' ),
 						),
 						'count' => array(
 							'type'        => 'integer',
-							'description' => __( 'Number of results to return (1–50).', 'webmcp-bridge' ),
+							'description' => __( 'Number of results to return (1–50).', 'webmcp-for-wordpress' ),
 							'default'     => 10,
 							'minimum'     => 1,
 							'maximum'     => 50,
@@ -108,7 +108,7 @@ class Builtin_Tools {
 	}
 
 	/**
-	 * Execute webmcp/search-posts.
+	 * Execute wp/search-posts.
 	 *
 	 * @param array $input Validated input from the agent.
 	 * @return array|\WP_Error
@@ -118,7 +118,7 @@ class Builtin_Tools {
 		$count = max( 1, min( 50, (int) ( $input['count'] ?? 10 ) ) );
 
 		if ( '' === $query ) {
-			return new \WP_Error( 'invalid_query', __( 'Search query is required.', 'webmcp-bridge' ) );
+			return new \WP_Error( 'invalid_query', __( 'Search query is required.', 'webmcp-for-wordpress' ) );
 		}
 
 		$posts = get_posts( array(
@@ -139,26 +139,26 @@ class Builtin_Tools {
 	}
 
 	// -------------------------------------------------------------------------
-	// Tool: webmcp/get-post
+	// Tool: wp/get-post
 	// -------------------------------------------------------------------------
 
 	private function register_get_post(): void {
 		wp_register_ability(
-			'webmcp/get-post',
+			'wp/get-post',
 			array(
-				'label'               => __( 'Get Post', 'webmcp-bridge' ),
-				'description'         => __( 'Retrieve a single post by its ID or slug. Returns the full post content, categories, tags, and metadata.', 'webmcp-bridge' ),
+				'label'               => __( 'Get Post', 'webmcp-for-wordpress' ),
+				'description'         => __( 'Retrieve a single post by its ID or slug. Returns the full post content, categories, tags, and metadata.', 'webmcp-for-wordpress' ),
 				'category'            => self::CATEGORY,
 				'input_schema'        => array(
 					'type'       => 'object',
 					'properties' => array(
 						'id'   => array(
 							'type'        => 'integer',
-							'description' => __( 'Post ID.', 'webmcp-bridge' ),
+							'description' => __( 'Post ID.', 'webmcp-for-wordpress' ),
 						),
 						'slug' => array(
 							'type'        => 'string',
-							'description' => __( 'Post slug (URL name).', 'webmcp-bridge' ),
+							'description' => __( 'Post slug (URL name).', 'webmcp-for-wordpress' ),
 						),
 					),
 				),
@@ -184,7 +184,7 @@ class Builtin_Tools {
 	}
 
 	/**
-	 * Execute webmcp/get-post.
+	 * Execute wp/get-post.
 	 *
 	 * @param array $input Validated input.
 	 * @return array|\WP_Error
@@ -204,12 +204,12 @@ class Builtin_Tools {
 		}
 
 		if ( ! $post instanceof \WP_Post ) {
-			return new \WP_Error( 'not_found', __( 'Post not found.', 'webmcp-bridge' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'not_found', __( 'Post not found.', 'webmcp-for-wordpress' ), array( 'status' => 404 ) );
 		}
 
 		// Only return published posts to unauthenticated users.
 		if ( 'publish' !== $post->post_status && ! current_user_can( 'read_post', $post->ID ) ) {
-			return new \WP_Error( 'not_found', __( 'Post not found.', 'webmcp-bridge' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'not_found', __( 'Post not found.', 'webmcp-for-wordpress' ), array( 'status' => 404 ) );
 		}
 
 		$categories = wp_get_post_categories( $post->ID, array( 'fields' => 'names' ) );
@@ -230,15 +230,15 @@ class Builtin_Tools {
 	}
 
 	// -------------------------------------------------------------------------
-	// Tool: webmcp/get-categories
+	// Tool: wp/get-categories
 	// -------------------------------------------------------------------------
 
 	private function register_get_categories(): void {
 		wp_register_ability(
-			'webmcp/get-categories',
+			'wp/get-categories',
 			array(
-				'label'               => __( 'Get Categories', 'webmcp-bridge' ),
-				'description'         => __( 'List all post categories with their names, descriptions, and post counts.', 'webmcp-bridge' ),
+				'label'               => __( 'Get Categories', 'webmcp-for-wordpress' ),
+				'description'         => __( 'List all post categories with their names, descriptions, and post counts.', 'webmcp-for-wordpress' ),
 				'category'            => self::CATEGORY,
 				'input_schema'        => array(
 					'type'       => 'object',
@@ -266,7 +266,7 @@ class Builtin_Tools {
 	}
 
 	/**
-	 * Execute webmcp/get-categories.
+	 * Execute wp/get-categories.
 	 *
 	 * @param array $input Validated input (unused).
 	 * @return array
@@ -295,34 +295,34 @@ class Builtin_Tools {
 	}
 
 	// -------------------------------------------------------------------------
-	// Tool: webmcp/submit-comment
+	// Tool: wp/submit-comment
 	// -------------------------------------------------------------------------
 
 	private function register_submit_comment(): void {
 		wp_register_ability(
-			'webmcp/submit-comment',
+			'wp/submit-comment',
 			array(
-				'label'               => __( 'Submit Comment', 'webmcp-bridge' ),
-				'description'         => __( 'Submit a comment on a post. Respects WordPress comment settings including open/closed comments and login requirements.', 'webmcp-bridge' ),
+				'label'               => __( 'Submit Comment', 'webmcp-for-wordpress' ),
+				'description'         => __( 'Submit a comment on a post. Respects WordPress comment settings including open/closed comments and login requirements.', 'webmcp-for-wordpress' ),
 				'category'            => self::CATEGORY,
 				'input_schema'        => array(
 					'type'       => 'object',
 					'properties' => array(
 						'post_id'      => array(
 							'type'        => 'integer',
-							'description' => __( 'ID of the post to comment on.', 'webmcp-bridge' ),
+							'description' => __( 'ID of the post to comment on.', 'webmcp-for-wordpress' ),
 						),
 						'content'      => array(
 							'type'        => 'string',
-							'description' => __( 'Comment text.', 'webmcp-bridge' ),
+							'description' => __( 'Comment text.', 'webmcp-for-wordpress' ),
 						),
 						'author_name'  => array(
 							'type'        => 'string',
-							'description' => __( 'Commenter name (optional for logged-in users).', 'webmcp-bridge' ),
+							'description' => __( 'Commenter name (optional for logged-in users).', 'webmcp-for-wordpress' ),
 						),
 						'author_email' => array(
 							'type'        => 'string',
-							'description' => __( 'Commenter email (optional for logged-in users).', 'webmcp-bridge' ),
+							'description' => __( 'Commenter email (optional for logged-in users).', 'webmcp-for-wordpress' ),
 						),
 					),
 					'required'   => array( 'post_id', 'content' ),
@@ -343,7 +343,7 @@ class Builtin_Tools {
 	}
 
 	/**
-	 * Permission check for submit-comment.
+	 * Permission check for wp/submit-comment.
 	 * Respects the site's "Anyone can register" and "Users must be logged in to comment" settings.
 	 */
 	public function can_submit_comment(): bool {
@@ -355,7 +355,7 @@ class Builtin_Tools {
 	}
 
 	/**
-	 * Execute webmcp/submit-comment.
+	 * Execute wp/submit-comment.
 	 *
 	 * @param array $input Validated input.
 	 * @return array|\WP_Error
@@ -365,16 +365,16 @@ class Builtin_Tools {
 		$content = sanitize_textarea_field( $input['content'] ?? '' );
 
 		if ( ! $post_id || '' === $content ) {
-			return new \WP_Error( 'invalid_input', __( 'post_id and content are required.', 'webmcp-bridge' ) );
+			return new \WP_Error( 'invalid_input', __( 'post_id and content are required.', 'webmcp-for-wordpress' ) );
 		}
 
 		$post = get_post( $post_id );
 		if ( ! $post instanceof \WP_Post || 'publish' !== $post->post_status ) {
-			return new \WP_Error( 'not_found', __( 'Post not found.', 'webmcp-bridge' ) );
+			return new \WP_Error( 'not_found', __( 'Post not found.', 'webmcp-for-wordpress' ) );
 		}
 
 		if ( ! comments_open( $post_id ) ) {
-			return new \WP_Error( 'comments_closed', __( 'Comments are closed on this post.', 'webmcp-bridge' ) );
+			return new \WP_Error( 'comments_closed', __( 'Comments are closed on this post.', 'webmcp-for-wordpress' ) );
 		}
 
 		$comment_data = array(
@@ -412,8 +412,8 @@ class Builtin_Tools {
 			'comment_id' => (int) $comment_id,
 			'status'     => $status,
 			'message'    => 'approved' === $status
-				? __( 'Comment posted successfully.', 'webmcp-bridge' )
-				: __( 'Comment submitted and is awaiting moderation.', 'webmcp-bridge' ),
+				? __( 'Comment posted successfully.', 'webmcp-for-wordpress' )
+				: __( 'Comment submitted and is awaiting moderation.', 'webmcp-for-wordpress' ),
 		);
 	}
 }

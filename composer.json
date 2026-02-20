@@ -1,5 +1,5 @@
 {
-  "name": "code-atlantic/webmcp-bridge",
+  "name": "code-atlantic/webmcp-for-wordpress",
   "description": "Bridges WordPress Abilities to the WebMCP browser API (navigator.modelContext)",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
@@ -14,12 +14,12 @@
   },
   "autoload": {
     "psr-4": {
-      "WebMCP_Bridge\\": "includes/"
+      "WebMCP\\": "includes/"
     }
   },
   "scripts": {
     "test": "phpunit",
-    "lint": "phpcs --standard=WordPress includes/ webmcp-bridge.php"
+    "lint": "phpcs --standard=WordPress includes/ webmcp-for-wordpress.php"
   },
   "config": {
     "allow-plugins": {

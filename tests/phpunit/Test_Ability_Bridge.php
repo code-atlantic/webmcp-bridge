@@ -2,13 +2,13 @@
 /**
  * Tests for Ability_Bridge.
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
-namespace WebMCP_Bridge\Tests;
+namespace WebMCP\Tests;
 
-use WebMCP_Bridge\Ability_Bridge;
-use WebMCP_Bridge\Settings;
+use WebMCP\Ability_Bridge;
+use WebMCP\Settings;
 use WP_UnitTestCase;
 
 class Test_Ability_Bridge extends WP_UnitTestCase {
@@ -215,13 +215,13 @@ class Test_Ability_Bridge extends WP_UnitTestCase {
 
 	public function test_validate_schema_returns_empty_object_for_empty_input(): void {
 		$schema = $this->bridge->validate_schema( array() );
-		$this->assertSame( array( 'type' => 'object', 'properties' => array() ), $schema );
+		$this->assertEquals( array( 'type' => 'object', 'properties' => new \stdClass() ), $schema );
 	}
 
 	public function test_validate_schema_rejects_excessive_depth(): void {
 		$deep   = array( 'a' => array( 'b' => array( 'c' => array( 'd' => array( 'e' => array( 'f' => 'too deep' ) ) ) ) ) );
 		$schema = $this->bridge->validate_schema( $deep );
-		$this->assertSame( array( 'type' => 'object', 'properties' => array() ), $schema );
+		$this->assertEquals( array( 'type' => 'object', 'properties' => new \stdClass() ), $schema );
 	}
 
 	public function test_validate_schema_rejects_dollar_ref(): void {
@@ -232,7 +232,7 @@ class Test_Ability_Bridge extends WP_UnitTestCase {
 			),
 		);
 		$schema          = $this->bridge->validate_schema( $schema_with_ref );
-		$this->assertSame( array( 'type' => 'object', 'properties' => array() ), $schema );
+		$this->assertEquals( array( 'type' => 'object', 'properties' => new \stdClass() ), $schema );
 	}
 
 	public function test_validate_schema_passes_valid_schema(): void {

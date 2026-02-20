@@ -2,12 +2,12 @@
 /**
  * Tests for Builtin_Tools.
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
-namespace WebMCP_Bridge\Tests;
+namespace WebMCP\Tests;
 
-use WebMCP_Bridge\Builtin_Tools;
+use WebMCP\Builtin_Tools;
 use WP_UnitTestCase;
 
 class Test_Builtin_Tools extends WP_UnitTestCase {

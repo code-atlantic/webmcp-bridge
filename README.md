@@ -1,4 +1,4 @@
-# WebMCP Bridge for WordPress
+# WebMCP for WordPress for WordPress
 
 [![WordPress](https://img.shields.io/badge/WordPress-6.9%2B-21759B?logo=wordpress&logoColor=white)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-8.0%2B-777BB4?logo=php&logoColor=white)](https://php.net)
@@ -9,7 +9,7 @@
 
 **Turn any WordPress site into a structured tool server for AI agents** — no custom API, no scraping, no prompt engineering required.
 
-WebMCP Bridge connects the [WordPress Abilities API](https://developer.wordpress.org/apis/abilities-api/) to the [WebMCP browser standard](https://webmachinelearning.github.io/webmcp/), so AI agents running in Chrome 146+ can discover and call your site's capabilities as reliable, schema-driven tools.
+WebMCP for WordPress connects the [WordPress Abilities API](https://developer.wordpress.org/apis/abilities-api/) to the [WebMCP browser standard](https://webmachinelearning.github.io/webmcp/), so AI agents running in Chrome 146+ can discover and call your site's capabilities as reliable, schema-driven tools.
 
 ---
 
@@ -63,10 +63,10 @@ Four starter tools are included out of the box:
 
 | Tool | Description | Auth |
 |------|-------------|------|
-| `webmcp/search-posts` | Full-text search across published posts | Public |
-| `webmcp/get-post` | Retrieve a post by ID or slug with full content | Public |
-| `webmcp/get-categories` | List all categories with counts and descriptions | Public |
-| `webmcp/submit-comment` | Submit a comment (respects WP comment settings) | Configurable |
+| `search-posts` | Full-text search across published posts | Public |
+| `get-post` | Retrieve a post by ID or slug with full content | Public |
+| `get-categories` | List all categories with counts and descriptions | Public |
+| `submit-comment` | Submit a comment (respects WP comment settings) | Configurable |
 
 Disable all built-ins with one filter:
 ```php
@@ -87,12 +87,12 @@ add_filter( 'wmcp_include_builtin_tools', '__return_false' );
 ### From Source
 
 ```bash
-git clone https://github.com/code-atlantic/webmcp-bridge.git
-cd webmcp-bridge
+git clone https://github.com/code-atlantic/webmcp-for-wordpress.git
+cd webmcp-for-wordpress
 composer install --no-dev
 ```
 
-Upload to `wp-content/plugins/webmcp-bridge/` and activate.
+Upload to `wp-content/plugins/webmcp-for-wordpress/` and activate.
 
 ---
 
@@ -124,7 +124,7 @@ add_action( 'wp_abilities_api_init', function () {
 } );
 ```
 
-WebMCP Bridge automatically picks up any registered ability and exposes it — no extra configuration needed.
+WebMCP for WordPress automatically picks up any registered ability and exposes it — no extra configuration needed.
 
 ### Visibility Control
 
@@ -171,7 +171,7 @@ The `/tools` endpoint supports:
 ```php
 // Allow/block a tool from appearing at all
 add_filter( 'wmcp_expose_ability', function ( $expose, $name, $ability ) {
-    return $name !== 'webmcp/submit-comment'; // hide comment tool
+    return $name !== 'submit-comment'; // hide comment tool
 }, 10, 3 );
 
 // Customize the tool definition before it's sent to the browser
@@ -225,7 +225,7 @@ npx wp-env start
 
 # Run the suite
 npx wp-env run tests-cli \
-  "bash -c 'cd /var/www/html/wp-content/plugins/webmcp-bridge && WP_TESTS_DIR=/wordpress-phpunit ./vendor/bin/phpunit'"
+  "bash -c 'cd /var/www/html/wp-content/plugins/webmcp-for-wordpress && WP_TESTS_DIR=/wordpress-phpunit ./vendor/bin/phpunit'"
 ```
 
 Test coverage:
@@ -239,8 +239,8 @@ Test coverage:
 ## Architecture
 
 ```
-webmcp-bridge/
-├── webmcp-bridge.php          # Bootstrap, version guard
+webmcp-for-wordpress/
+├── webmcp-for-wordpress.php          # Bootstrap, version guard
 ├── includes/
 │   ├── class-plugin.php       # Singleton wiring
 │   ├── class-settings.php     # Options: enabled, discovery, exposed list
@@ -250,7 +250,7 @@ webmcp-bridge/
 │   ├── class-rate-limiter.php # Transient-based rate limiting
 │   └── class-admin-page.php   # Settings UI
 ├── assets/js/src/
-│   └── webmcp-bridge.js       # navigator.modelContext.registerTool() calls
+│   └── webmcp-for-wordpress.js       # navigator.modelContext.registerTool() calls
 └── tests/phpunit/             # 50 integration tests
 ```
 

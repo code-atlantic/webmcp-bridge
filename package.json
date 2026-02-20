@@ -1,11 +1,11 @@
 {
-  "name": "webmcp-bridge",
+  "name": "webmcp-for-wordpress",
   "version": "1.0.0",
   "description": "Bridges WordPress Abilities to the WebMCP browser API",
   "private": true,
   "scripts": {
-    "build": "wp-scripts build assets/js/src/webmcp-bridge.js --output-path=assets/js/build",
-    "start": "wp-scripts start assets/js/src/webmcp-bridge.js --output-path=assets/js/build",
+    "build": "wp-scripts build assets/js/src/webmcp-for-wordpress.js --output-path=assets/js/build",
+    "start": "wp-scripts start assets/js/src/webmcp-for-wordpress.js --output-path=assets/js/build",
     "lint:js": "wp-scripts lint-js",
     "format": "wp-scripts format"
   },

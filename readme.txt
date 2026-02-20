@@ -1,4 +1,4 @@
-=== WebMCP Bridge ===
+=== WebMCP for WordPress ===
 Contributors: codeatlantic
 Tags: ai, agents, webmcp, abilities, mcp
 Requires at least: 6.9
@@ -12,7 +12,7 @@ Bridges WordPress Abilities to the WebMCP browser API, making your site's capabi
 
 == Description ==
 
-**WebMCP Bridge** connects the [WordPress Abilities API](https://developer.wordpress.org/apis/abilities-api/) to the [WebMCP browser standard](https://webmachinelearning.github.io/webmcp/), allowing AI agents running in Chrome 146+ to discover and invoke your site's registered capabilities as structured tools.
+**WebMCP for WordPress** connects the [WordPress Abilities API](https://developer.wordpress.org/apis/abilities-api/) to the [WebMCP browser standard](https://webmachinelearning.github.io/webmcp/), allowing AI agents running in Chrome 146+ to discover and invoke your site's registered capabilities as structured tools.
 
 = How It Works =
 
@@ -62,7 +62,7 @@ wp_register_ability( 'my-plugin/my-action', array(
 
 == Installation ==
 
-1. Upload the `webmcp-bridge` folder to `/wp-content/plugins/`
+1. Upload the `webmcp-for-wordpress` folder to `/wp-content/plugins/`
 2. Activate the plugin through the **Plugins** screen in WordPress
 3. Go to **Settings → WebMCP** to enable and configure the plugin
 4. Ensure your site is served over HTTPS

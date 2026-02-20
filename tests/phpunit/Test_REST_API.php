@@ -2,15 +2,15 @@
 /**
  * Tests for REST_API endpoints.
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
-namespace WebMCP_Bridge\Tests;
+namespace WebMCP\Tests;
 
-use WebMCP_Bridge\Ability_Bridge;
-use WebMCP_Bridge\Rate_Limiter;
-use WebMCP_Bridge\REST_API;
-use WebMCP_Bridge\Settings;
+use WebMCP\Ability_Bridge;
+use WebMCP\Rate_Limiter;
+use WebMCP\REST_API;
+use WebMCP\Settings;
 use WP_REST_Request;
 use WP_UnitTestCase;
 
@@ -133,7 +133,7 @@ class Test_REST_API extends WP_UnitTestCase {
 		// get-categories has __return_true permission callback — no auth needed.
 		wp_set_current_user( 0 );
 
-		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/webmcp%2Fget-categories' );
+		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/wp%2Fget-categories' );
 		$request->set_body( '{}' );
 		$request->set_header( 'Content-Type', 'application/json' );
 		$response = rest_do_request( $request );
@@ -143,7 +143,7 @@ class Test_REST_API extends WP_UnitTestCase {
 
 	public function test_execute_succeeds_without_nonce_for_read_only_tool(): void {
 		// Read-only tools skip CSRF nonce check even for logged-in users.
-		$request  = new WP_REST_Request( 'POST', '/webmcp/v1/execute/webmcp%2Fget-categories' );
+		$request  = new WP_REST_Request( 'POST', '/webmcp/v1/execute/wp%2Fget-categories' );
 		$request->set_body( '{}' );
 		$request->set_header( 'Content-Type', 'application/json' );
 		$response = rest_do_request( $request );
@@ -153,7 +153,7 @@ class Test_REST_API extends WP_UnitTestCase {
 
 	public function test_execute_returns_403_without_nonce_for_write_tool(): void {
 		// Write tools (no wmcp_read_only) require a nonce for logged-in users.
-		$request  = new WP_REST_Request( 'POST', '/webmcp/v1/execute/webmcp%2Fsubmit-comment' );
+		$request  = new WP_REST_Request( 'POST', '/webmcp/v1/execute/wp%2Fsubmit-comment' );
 		$request->set_body( '{}' );
 		$response = rest_do_request( $request );
 
@@ -163,7 +163,7 @@ class Test_REST_API extends WP_UnitTestCase {
 	public function test_execute_succeeds_with_valid_nonce(): void {
 		$nonce = wp_create_nonce( 'wmcp_execute' );
 
-		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/webmcp%2Fget-categories' );
+		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/wp%2Fget-categories' );
 		$request->add_header( 'X-WP-Nonce', $nonce );
 		$request->set_body( '{}' );
 		$request->set_header( 'Content-Type', 'application/json' );
@@ -192,7 +192,7 @@ class Test_REST_API extends WP_UnitTestCase {
 
 		$nonce = wp_create_nonce( 'wmcp_execute' );
 
-		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/webmcp%2Fget-categories' );
+		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/wp%2Fget-categories' );
 		$request->add_header( 'X-WP-Nonce', $nonce );
 
 		$response = rest_do_request( $request );
@@ -207,7 +207,7 @@ class Test_REST_API extends WP_UnitTestCase {
 
 		$nonce = wp_create_nonce( 'wmcp_execute' );
 
-		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/webmcp%2Fget-categories' );
+		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/wp%2Fget-categories' );
 		$request->add_header( 'X-WP-Nonce', $nonce );
 		$request->set_body( '{}' );
 
@@ -226,7 +226,7 @@ class Test_REST_API extends WP_UnitTestCase {
 
 		$nonce = wp_create_nonce( 'wmcp_execute' );
 
-		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/webmcp%2Fget-categories' );
+		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/wp%2Fget-categories' );
 		$request->add_header( 'X-WP-Nonce', $nonce );
 		$request->set_body( '{}' );
 
@@ -248,7 +248,7 @@ class Test_REST_API extends WP_UnitTestCase {
 
 		$nonce = wp_create_nonce( 'wmcp_execute' );
 
-		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/webmcp%2Fget-categories' );
+		$request = new WP_REST_Request( 'POST', '/webmcp/v1/execute/wp%2Fget-categories' );
 		$request->add_header( 'X-WP-Nonce', $nonce );
 		$request->set_body( '{}' );
 		rest_do_request( $request );
@@ -256,6 +256,6 @@ class Test_REST_API extends WP_UnitTestCase {
 		remove_all_actions( 'wmcp_tool_executed' );
 
 		$this->assertTrue( $fired );
-		$this->assertSame( 'webmcp/get-categories', $fired_name );
+		$this->assertSame( 'wp/get-categories', $fired_name );
 	}
 }

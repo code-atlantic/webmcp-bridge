@@ -1,26 +1,26 @@
 <?php
 /**
- * Plugin Name: WebMCP Bridge
- * Plugin URI:  https://github.com/code-atlantic/webmcp-bridge
+ * Plugin Name: WebMCP for WordPress
+ * Plugin URI:  https://github.com/code-atlantic/webmcp-for-wordpress
  * Description: Bridges WordPress Abilities to the WebMCP browser API (navigator.modelContext), making any WordPress site's capabilities discoverable and invocable by AI agents in Chrome 146+.
- * Version:     0.3.1
+ * Version:     0.4.0
  * Author:      Code Atlantic
  * Author URI:  https://code-atlantic.com
  * License:     GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: webmcp-bridge
+ * Text Domain: webmcp-for-wordpress
  * Requires PHP: 8.0
  * Requires at least: 6.9
- * GitHub Plugin URI: https://github.com/code-atlantic/webmcp-bridge
+ * GitHub Plugin URI: https://github.com/code-atlantic/webmcp-for-wordpress
  * Primary Branch:    main
  * Release Asset:     true
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WMCP_VERSION', '0.3.1' );
+define( 'WMCP_VERSION', '0.4.0' );
 define( 'WMCP_PLUGIN_FILE', __FILE__ );
 define( 'WMCP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WMCP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -39,10 +39,10 @@ function wmcp_activation_check(): void {
 		wp_die(
 			sprintf(
 				/* translators: %s: Required WordPress version */
-				esc_html__( 'WebMCP Bridge requires WordPress %s or higher. Please update WordPress and try again.', 'webmcp-bridge' ),
+				esc_html__( 'WebMCP Bridge requires WordPress %s or higher. Please update WordPress and try again.', 'webmcp-for-wordpress' ),
 				'6.9'
 			),
-			esc_html__( 'Plugin Activation Error', 'webmcp-bridge' ),
+			esc_html__( 'Plugin Activation Error', 'webmcp-for-wordpress' ),
 			array( 'back_link' => true )
 		);
 	}
@@ -50,8 +50,8 @@ function wmcp_activation_check(): void {
 	if ( ! function_exists( 'wp_register_ability' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		wp_die(
-			esc_html__( 'WebMCP Bridge requires the WordPress Abilities API. Please ensure you are running WordPress 6.9 or higher with the Abilities API available.', 'webmcp-bridge' ),
-			esc_html__( 'Plugin Activation Error', 'webmcp-bridge' ),
+			esc_html__( 'WebMCP Bridge requires the WordPress Abilities API. Please ensure you are running WordPress 6.9 or higher with the Abilities API available.', 'webmcp-for-wordpress' ),
+			esc_html__( 'Plugin Activation Error', 'webmcp-for-wordpress' ),
 			array( 'back_link' => true )
 		);
 	}
@@ -82,7 +82,7 @@ function wmcp_init(): void {
 	require_once WMCP_PLUGIN_DIR . 'includes/class-admin-page.php';
 	require_once WMCP_PLUGIN_DIR . 'includes/class-plugin.php';
 
-	WebMCP_Bridge\Plugin::instance();
+	WebMCP\Plugin::instance();
 }
 add_action( 'plugins_loaded', 'wmcp_init' );
 
@@ -93,7 +93,7 @@ function wmcp_incompatible_notice(): void {
 	?>
 	<div class="notice notice-error">
 		<p>
-			<?php esc_html_e( 'WebMCP Bridge requires WordPress 6.9 or higher. The plugin is currently inactive.', 'webmcp-bridge' ); ?>
+			<?php esc_html_e( 'WebMCP Bridge requires WordPress 6.9 or higher. The plugin is currently inactive.', 'webmcp-for-wordpress' ); ?>
 		</p>
 	</div>
 	<?php

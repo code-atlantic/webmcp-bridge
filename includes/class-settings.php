@@ -2,10 +2,10 @@
 /**
  * Settings management.
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
-namespace WebMCP_Bridge;
+namespace WebMCP;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -2,10 +2,10 @@
 /**
  * Bridges WordPress Abilities to WebMCP tool definitions.
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
-namespace WebMCP_Bridge;
+namespace WebMCP;
 
 defined( 'ABSPATH' ) || exit;
 

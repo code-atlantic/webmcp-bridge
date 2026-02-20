@@ -4,7 +4,7 @@
  *
  * Removes all options, transients, and object cache keys created by WebMCP Bridge.
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
 // Only run when WordPress itself calls this during plugin uninstallation.

@@ -2,12 +2,12 @@
 /**
  * Tests for Rate_Limiter.
  *
- * @package WebMCP_Bridge
+ * @package WebMCP
  */
 
-namespace WebMCP_Bridge\Tests;
+namespace WebMCP\Tests;
 
-use WebMCP_Bridge\Rate_Limiter;
+use WebMCP\Rate_Limiter;
 use WP_UnitTestCase;
 
 class Test_Rate_Limiter extends WP_UnitTestCase {
