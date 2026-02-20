@@ -4,7 +4,7 @@ Tags: ai, agents, webmcp, abilities, mcp
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.6.0
+Stable tag: 0.6.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,11 @@ This feature (which allows agents to discover tools before visiting the page) is
 1. The WebMCP Abilities settings page — enable the bridge, control tool discovery, and manage which tools are exposed to AI agents.
 
 == Changelog ==
+
+= 0.6.1 =
+* Security: third-party abilities now default to hidden on fresh installs
+* Only built-in tools (search, get post, categories, comments) are exposed by default
+* Admins must explicitly enable new tools via Settings → WebMCP
 
 = 0.6.0 =
 * Renamed plugin from "WebMCP for WordPress" to "WebMCP Abilities for WordPress" for WordPress.org compliance
