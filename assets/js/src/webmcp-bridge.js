@@ -195,8 +195,12 @@
 		const mcpTools = tools
 			.filter( ( tool ) => tool.name && tool.description )
 			.map( ( tool ) => {
+				// Gemini rejects tool names containing '/'. Sanitize for WebMCP
+				// registration while keeping the original name for the execute URL.
+				const safeName = tool.name.replace( /\//g, '_' );
+
 				const entry = {
-					name:        tool.name,
+					name:        safeName,
 					description: tool.description,
 					inputSchema: tool.inputSchema ?? { type: 'object', properties: {} },
 					execute:     async ( input /*, client */ ) => executeTool( tool.name, input ),
