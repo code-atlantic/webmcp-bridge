@@ -82,32 +82,45 @@ class Settings {
 		return ! $require_auth;
 	}
 
+	/** Built-in tool names exposed by default on fresh installs. */
+	const DEFAULT_EXPOSED_TOOLS = [
+		'wp/search-posts',
+		'wp/get-post',
+		'wp/get-categories',
+		'wp/submit-comment',
+	];
+
 	/**
 	 * Get the list of tool names the admin has chosen to expose.
-	 * An empty array means the admin has not yet configured the list —
-	 * in that case all tools are exposed (permissive default for first install).
+	 * If never configured, returns only the built-in tools.
 	 *
 	 * @return string[] Tool name slugs.
 	 */
 	public function get_exposed_tools(): array {
-		return (array) get_option( self::OPTION_EXPOSED_TOOLS, [] );
+		$value = get_option( self::OPTION_EXPOSED_TOOLS, null );
+
+		// Never saved = fresh install — default to built-ins only.
+		if ( null === $value ) {
+			return self::DEFAULT_EXPOSED_TOOLS;
+		}
+
+		return (array) $value;
+	}
+
+	/**
+	 * Whether the exposed tools list has been explicitly saved by an admin.
+	 */
+	public function has_exposed_tools_been_configured(): bool {
+		return null !== get_option( self::OPTION_EXPOSED_TOOLS, null );
 	}
 
 	/**
 	 * Whether a given tool name is in the admin's exposed list.
-	 * If no list has been saved yet (first install), all tools are allowed.
 	 *
 	 * @param string $tool_name Ability identifier.
 	 */
 	public function is_tool_exposed( string $tool_name ): bool {
-		$exposed = $this->get_exposed_tools();
-
-		// Empty list = not yet configured = allow everything.
-		if ( empty( $exposed ) ) {
-			return true;
-		}
-
-		return in_array( $tool_name, $exposed, true );
+		return in_array( $tool_name, $this->get_exposed_tools(), true );
 	}
 
 	/**

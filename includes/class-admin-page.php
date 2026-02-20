@@ -181,8 +181,7 @@ class Admin_Page {
 									$label       = wp_strip_all_tags( $ability->get_label() );
 									$description = wp_strip_all_tags( $ability->get_description() );
 
-									// An empty exposed list means "all exposed" (first install).
-									$is_checked = empty( $exposed_tools ) || in_array( $name, $exposed_tools, true );
+									$is_checked = in_array( $name, $exposed_tools, true );
 
 									// Determine permission label from meta visibility.
 									$perm_label = ( 'public' === $ability->get_meta_item( 'wmcp_visibility', 'public' ) )

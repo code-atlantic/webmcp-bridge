@@ -48,6 +48,18 @@ class Test_Ability_Bridge extends WP_UnitTestCase {
 
 		update_option( Settings::OPTION_ENABLED, true );
 
+		// Explicitly expose test tools so convert() tests aren't blocked by the default allowlist.
+		update_option( Settings::OPTION_EXPOSED_TOOLS, [
+			'test/public',
+			'test/private',
+			'test/no-vis',
+			'test/locked',
+			'test/not-listed',
+			'test/listed',
+			'test/safe',
+			'test/filtered',
+		] );
+
 		// Ensure the abilities registry is initialized so our test category is available.
 		wp_get_abilities();
 
